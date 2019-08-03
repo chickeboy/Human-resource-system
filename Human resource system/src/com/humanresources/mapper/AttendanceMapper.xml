@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.humanresources.mapper.AttendanceMapper" >
+  <resultMap id="BaseResultMap" type="com.humanresources.bean.Attendance" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="worktime" property="worktime" jdbcType="TIMESTAMP" />
+    <result column="afterworktime" property="afterworktime" jdbcType="TIMESTAMP" />
+    <result column="userid" property="userid" jdbcType="INTEGER" />
+    <result column="workstateid" property="workstateid" jdbcType="INTEGER" />
+    <result column="afterstateid" property="afterstateid" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, worktime, afterworktime, userid, workstateid, afterstateid
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.humanresources.bean.AttendanceExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from attendance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from attendance
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  <select id="findidByTime" resultType="java.lang.Integer" parameterType="java.util.Date"> 
+  select id from attendance
+  where worktime = #{time} 
+  </select>
+  <select id="findattdays" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  	select count(*) from attendance
+  	where workstateid = 1
+  	and afterstateid = 1
+  	and userid = #{userid}
+  </select>
+  <select id="findLeaveDays" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  	select count(*) from attendance 
+  	where workstateid = 5
+  	and afterstateid = 5  
+  	and userid = #{userid}	
+  </select>
+  <select id="findovertimeDays" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  select count(*) from attendance
+  where workstateid = 1
+  	and afterstateid = 6  
+  	and userid = #{userid} 
+  </select>
+  
+  
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from attendance
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.humanresources.bean.AttendanceExample" >
+    delete from attendance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.humanresources.bean.Attendance" >
+    insert into attendance (id, worktime, afterworktime, 
+      userid, workstateid, afterstateid
+      )
+    values (#{id,jdbcType=INTEGER}, #{worktime,jdbcType=TIMESTAMP}, #{afterworktime,jdbcType=TIMESTAMP}, 
+      #{userid,jdbcType=INTEGER}, #{workstateid,jdbcType=INTEGER}, #{afterstateid,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.humanresources.bean.Attendance" >
+    insert into attendance
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="worktime != null" >
+        worktime,
+      </if>
+      <if test="afterworktime != null" >
+        afterworktime,
+      </if>
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="workstateid != null" >
+        workstateid,
+      </if>
+      <if test="afterstateid != null" >
+        afterstateid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="worktime != null" >
+        #{worktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="afterworktime != null" >
+        #{afterworktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="workstateid != null" >
+        #{workstateid,jdbcType=INTEGER},
+      </if>
+      <if test="afterstateid != null" >
+        #{afterstateid,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.humanresources.bean.AttendanceExample" resultType="java.lang.Integer" >
+    select count(*) from attendance
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update attendance
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.worktime != null" >
+        worktime = #{record.worktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.afterworktime != null" >
+        afterworktime = #{record.afterworktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userid != null" >
+        userid = #{record.userid,jdbcType=INTEGER},
+      </if>
+      <if test="record.workstateid != null" >
+        workstateid = #{record.workstateid,jdbcType=INTEGER},
+      </if>
+      <if test="record.afterstateid != null" >
+        afterstateid = #{record.afterstateid,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update attendance
+    set id = #{record.id,jdbcType=INTEGER},
+      worktime = #{record.worktime,jdbcType=TIMESTAMP},
+      afterworktime = #{record.afterworktime,jdbcType=TIMESTAMP},
+      userid = #{record.userid,jdbcType=INTEGER},
+      workstateid = #{record.workstateid,jdbcType=INTEGER},
+      afterstateid = #{record.afterstateid,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.humanresources.bean.Attendance" >
+    update attendance
+    <set >
+      <if test="worktime != null" >
+        worktime = #{worktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="afterworktime != null" >
+        afterworktime = #{afterworktime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userid != null" >
+        userid = #{userid,jdbcType=INTEGER},
+      </if>
+      <if test="workstateid != null" >
+        workstateid = #{workstateid,jdbcType=INTEGER},
+      </if>
+      <if test="afterstateid != null" >
+        afterstateid = #{afterstateid,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.humanresources.bean.Attendance" >
+    update attendance
+    set worktime = #{worktime,jdbcType=TIMESTAMP},
+      afterworktime = #{afterworktime,jdbcType=TIMESTAMP},
+      userid = #{userid,jdbcType=INTEGER},
+      workstateid = #{workstateid,jdbcType=INTEGER},
+      afterstateid = #{afterstateid,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.humanresources.mapper.ResumeMapper">
+	<resultMap id="BaseResultMap"
+		type="com.humanresources.bean.Resume">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="userid" property="userid" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="birthday" property="birthday"
+			jdbcType="TIMESTAMP" />
+		<result column="age" property="age" jdbcType="INTEGER" />
+		<result column="experience" property="experience"
+			jdbcType="VARCHAR" />
+		<result column="assessment" property="assessment"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, userid, name, birthday, age, experience, assessment
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.humanresources.bean.ResumeExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from resume
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from resume
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey"
+		parameterType="java.lang.Integer">
+		delete from resume
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample"
+		parameterType="com.humanresources.bean.ResumeExample">
+		delete from resume
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	
+	
+	<delete id="deleteByResume" parameterType="com.humanresources.bean.Resume">
+		delete from resume
+		where userid = #{userid}
+		and name = #{name}
+		and birthday = #{birthday}
+		and age = age
+		and experience = #{experience}	
+		and assessment = #{assessment}
+	</delete>
+	
+	
+	<insert id="insert"
+		parameterType="com.humanresources.bean.Resume">
+		insert into resume (id, userid, name,
+		birthday, age, experience,
+		assessment)
+		values (#{id,jdbcType=INTEGER}, #{userid,jdbcType=INTEGER},
+		#{name,jdbcType=VARCHAR},
+		#{birthday,jdbcType=TIMESTAMP}, #{age,jdbcType=INTEGER}, #{experience,jdbcType=VARCHAR},
+		#{assessment,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.humanresources.bean.Resume">
+		insert into resume
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="userid != null">
+				userid,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="birthday != null">
+				birthday,
+			</if>
+			<if test="age != null">
+				age,
+			</if>
+			<if test="experience != null">
+				experience,
+			</if>
+			<if test="assessment != null">
+				assessment,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="userid != null">
+				#{userid,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				#{birthday,jdbcType=TIMESTAMP},
+			</if>
+			<if test="age != null">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="experience != null">
+				#{experience,jdbcType=VARCHAR},
+			</if>
+			<if test="assessment != null">
+				#{assessment,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.humanresources.bean.ResumeExample"
+		resultType="java.lang.Integer">
+		select count(*) from resume
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	
+	
+	
+	
+	
+	<select id="findResumeByUserName" resultType="com.humanresources.bean.Resume" parameterType="java.lang.String">
+	select * from resume,users where users.username = #{username} and users.id = resume.userid
+	</select>
+	<select id="fingAllList"
+		resultType="com.humanresources.bean.Resume">
+		select * from resume
+	</select>
+	
+	
+	
+	
+	
+	<update id="updateByExampleSelective" parameterType="map">
+		update resume
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.userid != null">
+				userid = #{record.userid,jdbcType=INTEGER},
+			</if>
+			<if test="record.name != null">
+				name = #{record.name,jdbcType=VARCHAR},
+			</if>
+			<if test="record.birthday != null">
+				birthday = #{record.birthday,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.age != null">
+				age = #{record.age,jdbcType=INTEGER},
+			</if>
+			<if test="record.experience != null">
+				experience = #{record.experience,jdbcType=VARCHAR},
+			</if>
+			<if test="record.assessment != null">
+				assessment = #{record.assessment,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update resume
+		set id = #{record.id,jdbcType=INTEGER},
+		userid = #{record.userid,jdbcType=INTEGER},
+		name = #{record.name,jdbcType=VARCHAR},
+		birthday = #{record.birthday,jdbcType=TIMESTAMP},
+		age = #{record.age,jdbcType=INTEGER},
+		experience = #{record.experience,jdbcType=VARCHAR},
+		assessment = #{record.assessment,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective"
+		parameterType="com.humanresources.bean.Resume">
+		update resume
+		<set>
+			<if test="userid != null">
+				userid = #{userid,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null">
+				birthday = #{birthday,jdbcType=TIMESTAMP},
+			</if>
+			<if test="age != null">
+				age = #{age,jdbcType=INTEGER},
+			</if>
+			<if test="experience != null">
+				experience = #{experience,jdbcType=VARCHAR},
+			</if>
+			<if test="assessment != null">
+				assessment = #{assessment,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey"
+		parameterType="com.humanresources.bean.Resume">
+		update resume
+		set userid = #{userid,jdbcType=INTEGER},
+		name = #{name,jdbcType=VARCHAR},
+		birthday = #{birthday,jdbcType=TIMESTAMP},
+		age = #{age,jdbcType=INTEGER},
+		experience = #{experience,jdbcType=VARCHAR},
+		assessment = #{assessment,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+</mapper>
